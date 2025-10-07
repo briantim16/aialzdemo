@@ -1,3 +1,7 @@
+> [!NOTE]
+> This repo has been merged with its parent repo of [AI Landing Zones](https://aka.ms/ailz). As such future updates to the [bicep implementation](https://aka.ms/ailz/bicep) will happen there and this repo will be archived.
+
+
 # AI Landing Zone — Bicep Implementation
 
 This repository contains a **Bicep template** that is built on top of **Azure Verified Modules (AVM)** together with a few custom modules. It provisions a secure and configurable environment for **generative AI workloads** on Azure.

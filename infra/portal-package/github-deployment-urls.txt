@@ -1,0 +1,47 @@
+AI/ML Landing Zone - GitHub-Hosted Deployment URLs
+Generated: 2025-11-06 15:22:40
+
+GitHub Repository: https://github.com/briantim16/aialzdemo
+Branch: main
+
+=== RAW GITHUB URLS ===
+
+Template URL:
+https://raw.githubusercontent.com/briantim16/aialzdemo/main/infra/portal-package/mainTemplate.json
+
+UI Definition URL:
+https://raw.githubusercontent.com/briantim16/aialzdemo/main/infra/portal-package/createUiDefinition.json
+
+=== PORTAL DEPLOYMENT URLS ===
+
+With Custom UI Wizard:
+https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fmainTemplate.json/createUIDefinitionUri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fcreateUiDefinition.json
+
+Without Custom UI (Standard Parameters):
+https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fmainTemplate.json
+
+=== DEPLOY BUTTON CODE ===
+
+Markdown:
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fmainTemplate.json/createUIDefinitionUri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fcreateUiDefinition.json)
+
+HTML:
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fmainTemplate.json/createUIDefinitionUri/https%3a%2f%2fraw.githubusercontent.com%2fbriantim16%2faialzdemo%2fmain%2finfra%2fportal-package%2fcreateUiDefinition.json" target="_blank">
+    <img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/>
+</a>
+
+=== HOW TO USE ===
+
+1. Commit mainTemplate.json and createUiDefinition.json to your GitHub repo
+2. Push to the branch: main
+3. Share the deployment URL or add the button to your README.md
+4. Users click the button and see the custom 6-step wizard in Azure Portal
+
+=== NOTES ===
+
+- Files must be publicly accessible (public repo or raw.githubusercontent.com URLs)
+- Template size: No limit when hosted on GitHub
+- Custom UI: Works perfectly with GitHub-hosted templates
+- No Azure Storage needed
+- No costs for hosting
+

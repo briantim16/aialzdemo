@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Definition Validator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0078d4;
+            margin-top: 0;
+        }
+        .upload-area {
+            border: 2px dashed #0078d4;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            background-color: #f0f8ff;
+            border-color: #005a9e;
+        }
+        .upload-area.dragover {
+            background-color: #e6f3ff;
+            border-color: #005a9e;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #005a9e;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.success {
+            background-color: #dff6dd;
+            border-left: 4px solid #28a745;
+            display: block;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            border-left: 4px solid: #dc3545;
+            display: block;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .details {
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .step-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .step-list li {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        .output-params {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .param-badge {
+            background-color: #0078d4;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Azure UI Definition Validator</h1>
+        
+        <div class="info">
+            <strong>ℹ️ Local Testing Tool</strong><br>
+            This tool validates your createUiDefinition.json file locally before uploading to Azure Portal Sandbox.
+            It checks JSON syntax, schema compliance, and structure.
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <input type="file" id="fileInput" accept=".json">
+            <div>
+                <p style="font-size: 18px; margin: 0;">📁 Drag & Drop your createUiDefinition.json here</p>
+                <p style="color: #666;">or click to browse</p>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="button" id="validateBtn" disabled>Validate JSON</button>
+            <button class="button" id="openSandboxBtn">Open Azure Portal Sandbox</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <div id="details" class="details" style="display: none;"></div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const validateBtn = document.getElementById('validateBtn');
+        const openSandboxBtn = document.getElementById('openSandboxBtn');
+        const result = document.getElementById('result');
+        const details = document.getElementById('details');
+
+        let currentFile = null;
+        let jsonData = null;
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.json')) {
+                showError('Please select a JSON file');
+                return;
+            }
+
+            currentFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    jsonData = JSON.parse(e.target.result);
+                    validateBtn.disabled = false;
+                    showSuccess(`✅ File loaded: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
+                } catch (err) {
+                    showError(`❌ Invalid JSON: ${err.message}`);
+                    validateBtn.disabled = true;
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        validateBtn.addEventListener('click', () => {
+            if (!jsonData) return;
+            validateUIDefinition();
+        });
+
+        openSandboxBtn.addEventListener('click', () => {
+            window.open('https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/SandboxBlade', '_blank');
+        });
+
+        function validateUIDefinition() {
+            const checks = [];
+            let isValid = true;
+
+            // Check schema
+            const expectedSchema = 'https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#';
+            if (jsonData.$schema === expectedSchema) {
+                checks.push('✅ Correct schema version (0.1.2-preview)');
+            } else {
+                checks.push(`⚠️ Schema: ${jsonData.$schema || 'Missing'}`);
+                isValid = false;
+            }
+
+            // Check handler
+            if (jsonData.handler === 'Microsoft.Azure.CreateUIDef') {
+                checks.push('✅ Correct handler');
+            } else {
+                checks.push(`❌ Invalid handler: ${jsonData.handler || 'Missing'}`);
+                isValid = false;
+            }
+
+            // Check version
+            if (jsonData.version === '0.1.2-preview') {
+                checks.push('✅ Correct version');
+            } else {
+                checks.push(`⚠️ Version: ${jsonData.version || 'Missing'}`);
+            }
+
+            // Check structure
+            if (jsonData.parameters) {
+                checks.push('✅ Parameters section found');
+                
+                if (jsonData.parameters.steps) {
+                    const stepCount = jsonData.parameters.steps.length;
+                    checks.push(`✅ ${stepCount} wizard steps defined`);
+                    
+                    // List steps
+                    checks.push('<br><strong>📋 Wizard Steps:</strong>');
+                    jsonData.parameters.steps.forEach((step, i) => {
+                        checks.push(`&nbsp;&nbsp;${i + 1}. ${step.label} (${step.name})`);
+                    });
+                }
+
+                if (jsonData.parameters.outputs) {
+                    const outputCount = Object.keys(jsonData.parameters.outputs).length;
+                    checks.push(`<br>✅ ${outputCount} output parameters defined`);
+                    
+                    checks.push('<div class="output-params">');
+                    Object.keys(jsonData.parameters.outputs).forEach(key => {
+                        checks.push(`<span class="param-badge">${key}</span>`);
+                    });
+                    checks.push('</div>');
+                }
+            } else {
+                checks.push('❌ Parameters section missing');
+                isValid = false;
+            }
+
+            // Display results
+            if (isValid) {
+                result.className = 'result success';
+                result.innerHTML = '<strong>✅ Validation Successful!</strong><br>' + 
+                    'Your UI definition appears to be valid. You can now test it in the Azure Portal Sandbox.';
+            } else {
+                result.className = 'result error';
+                result.innerHTML = '<strong>❌ Validation Failed</strong><br>' +
+                    'Some issues were found. Please review the details below.';
+            }
+
+            details.style.display = 'block';
+            details.innerHTML = '<strong>Validation Results:</strong><br><br>' + checks.join('<br>');
+
+            // Show JSON preview
+            details.innerHTML += '<br><br><strong>JSON Structure Preview:</strong>';
+            details.innerHTML += '<pre>' + JSON.stringify({
+                schema: jsonData.$schema,
+                handler: jsonData.handler,
+                version: jsonData.version,
+                stepsCount: jsonData.parameters?.steps?.length || 0,
+                outputsCount: Object.keys(jsonData.parameters?.outputs || {}).length
+            }, null, 2) + '</pre>';
+        }
+
+        function showSuccess(message) {
+            result.className = 'result success';
+            result.innerHTML = message;
+            details.style.display = 'none';
+        }
+
+        function showError(message) {
+            result.className = 'result error';
+            result.innerHTML = message;
+            details.style.display = 'none';
+        }
+
+        // Show instructions on load
+        result.className = 'result';
+        result.style.display = 'block';
+        result.style.backgroundColor = '#d1ecf1';
+        result.style.borderLeft = '4px solid #0c5460';
+        result.innerHTML = `
+            <strong>📝 Instructions:</strong><br>
+            1. Load your createUiDefinition.json file using the upload area above<br>
+            2. Click "Validate JSON" to check for issues<br>
+            3. If validation passes, click "Open Azure Portal Sandbox" to test in Azure<br>
+            4. In the sandbox, upload your file and click "Preview"
+        `;
+    </script>
+</body>
+</html>

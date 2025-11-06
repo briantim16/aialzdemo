@@ -1,0 +1,603 @@
+WARNING: Unable to encode the output with cp1252 encoding. Unsupported characters are discarded.
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "parameters": {
+    "basics": [
+      {
+        "constraints": {
+          "regex": "^[a-z0-9]{0,12}$",
+          "required": false,
+          "validationMessage": "Base name must be 0-12 characters, lowercase letters and numbers only."
+        },
+        "defaultValue": "",
+        "label": "Base Name",
+        "name": "baseName",
+        "toolTip": "Base name to seed resource names. Leave empty to auto-generate a unique 12-character token.",
+        "type": "Microsoft.Common.TextBox",
+        "visible": true
+      },
+      {
+        "constraints": {
+          "regex": "^[a-z0-9]{0,13}$",
+          "required": false,
+          "validationMessage": "Resource token must be 0-13 characters, lowercase letters and numbers only."
+        },
+        "defaultValue": "",
+        "label": "Resource Token",
+        "name": "resourceToken",
+        "toolTip": "Deterministic token for resource names. Leave empty to auto-generate from subscription ID and resource group.",
+        "type": "Microsoft.Common.TextBox",
+        "visible": true
+      },
+      {
+        "constraints": {
+          "allowedValues": [
+            {
+              "label": "Yes",
+              "value": true
+            },
+            {
+              "label": "No",
+              "value": false
+            }
+          ],
+          "required": false
+        },
+        "defaultValue": "Yes",
+        "label": "Enable Telemetry",
+        "name": "enableTelemetry",
+        "toolTip": "Enable usage telemetry for the module (anonymous data collection for Azure Verified Modules)",
+        "type": "Microsoft.Common.OptionsGroup"
+      }
+    ],
+    "config": {
+      "basics": {
+        "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
+        "location": {
+          "label": "Region",
+          "resourceTypes": [
+            "Microsoft.Resources/resourceGroups"
+          ],
+          "toolTip": "Azure region for AI Landing Zone resources"
+        }
+      }
+    },
+    "outputs": {
+      "baseName": "[basics('baseName')]",
+      "deployToggles": {
+        "acaEnvironmentNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').containerPlatformSection.acaEnvironmentNsg, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "agentNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.agentNsg, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "apiManagement": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').apiManagementSection.apiManagement, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "apiManagementNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').apiManagementSection.apiManagementNsg, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "appConfig": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.appConfig, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "appInsights": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').observabilitySection.appInsights, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "applicationGateway": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.applicationGateway, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "applicationGatewayNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.applicationGatewayNsg, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "applicationGatewayPublicIp": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.applicationGatewayPublicIp, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "bastionHost": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').securityAccessSection.bastionHost, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "buildVm": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').securityAccessSection.buildVm, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "containerApps": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').containerPlatformSection.containerApps, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "containerEnv": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').containerPlatformSection.containerEnv, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "containerRegistry": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').containerPlatformSection.containerRegistry, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "cosmosDb": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.cosmosDb, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "devopsBuildAgentsNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').securityAccessSection.devopsBuildAgentsNsg, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "firewall": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.firewall, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "groundingWithBingSearch": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.groundingWithBingSearch, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "jumpVm": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').securityAccessSection.jumpVm, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "jumpboxNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').securityAccessSection.jumpboxNsg, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]",
+        "keyVault": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.keyVault, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "logAnalytics": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').observabilitySection.logAnalytics, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "peNsg": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.peNsg, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "searchService": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.searchService, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "storageAccount": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').aimlCoreSection.storageAccount, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "virtualNetwork": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.virtualNetwork, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
+        "wafPolicy": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').networkingSection.wafPolicy, if(equals(steps('installProfile').installationProfile, 'core'), false, true))]"
+      },
+      "enableTelemetry": "[basics('enableTelemetry')]",
+      "flagPlatformLandingZone": "[steps('networkConfig').platformLandingZone]",
+      "location": "[location()]",
+      "resourceIds": {
+        "appInsightsResourceId": "[steps('advancedConfig').existingResourcesSection.appInsightsResourceId]",
+        "containerRegistryResourceId": "[steps('advancedConfig').existingResourcesSection.containerRegistryResourceId]",
+        "keyVaultResourceId": "[steps('advancedConfig').existingResourcesSection.keyVaultResourceId]",
+        "logAnalyticsWorkspaceResourceId": "[steps('advancedConfig').existingResourcesSection.logAnalyticsWorkspaceResourceId]",
+        "storageAccountResourceId": "[steps('advancedConfig').existingResourcesSection.storageAccountResourceId]",
+        "virtualNetworkResourceId": "[steps('advancedConfig').existingResourcesSection.virtualNetworkResourceId]"
+      },
+      "resourceToken": "[basics('resourceToken')]",
+      "tags": {}
+    },
+    "steps": [
+      {
+        "elements": [
+          {
+            "name": "profileInfo",
+            "options": {
+              "icon": "Info",
+              "text": "Choose an installation profile to quickly configure your AI/ML Landing Zone. You can customize individual components after selecting a profile.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true
+          },
+          {
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "Full - Complete AI/ML Platform",
+                  "value": "full"
+                },
+                {
+                  "label": "Core - Essential AI Services",
+                  "value": "core"
+                },
+                {
+                  "label": "Custom - Select Individual Components",
+                  "value": "custom"
+                }
+              ],
+              "required": true
+            },
+            "defaultValue": "Full - Complete AI/ML Platform",
+            "label": "Installation Profile",
+            "name": "installationProfile",
+            "toolTip": "Select the installation profile. Full includes all services, Core includes essential AI services, Custom lets you choose each component.",
+            "type": "Microsoft.Common.DropDown",
+            "visible": true
+          },
+          {
+            "elements": [
+              {
+                "name": "fullProfileComponents",
+                "options": {
+                  "text": "The Full profile deploys:\n\n Networking: Virtual Network, 7 Network Security Groups, VNet Peering, Application Gateway, Azure Firewall\n AI/ML Core: AI Search, Cosmos DB, Storage Account, Key Vault, App Configuration\n Observability: Log Analytics, Application Insights\n Container Platform: Container Registry, Container Apps Environment, Container Apps\n API & Management: API Management\n Security & Access: Bastion Host, Jump VM, Build VM\n Additional: Bing Grounding, WAF Policy\n\nTotal: 28 components + supporting resources"
+                },
+                "type": "Microsoft.Common.TextBlock",
+                "visible": "[equals(steps('installProfile').installationProfile, 'full')]"
+              },
+              {
+                "name": "coreProfileComponents",
+                "options": {
+                  "text": "The Core profile deploys essential AI services:\n\n Networking: Virtual Network, Agent NSG, Private Endpoints NSG\n AI/ML Core: AI Search, Cosmos DB, Storage Account, Key Vault, App Configuration\n Observability: Log Analytics, Application Insights\n Container Platform: Container Registry\n\n Optional Services Excluded: API Management, Application Gateway, Azure Firewall, Container Apps, Build/Jump VMs, Bastion, Bing Grounding\n\nTotal: 11 core components"
+                },
+                "type": "Microsoft.Common.TextBlock",
+                "visible": "[equals(steps('installProfile').installationProfile, 'core')]"
+              }
+            ],
+            "label": "Selected Profile Summary",
+            "name": "profileSummary",
+            "type": "Microsoft.Common.Section",
+            "visible": "[not(equals(steps('installProfile').installationProfile, 'custom'))]"
+          }
+        ],
+        "label": "Installation Profile",
+        "name": "installProfile"
+      },
+      {
+        "elements": [
+          {
+            "name": "customModeInfo",
+            "options": {
+              "icon": "Info",
+              "text": "This step is only used when 'Custom' installation profile is selected. If you selected 'Full' or 'Core' profile, you can skip this step - components will be deployed according to your profile selection.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone/blob/main/docs/parameters.md"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true
+          },
+          {
+            "elements": [
+              {
+                "label": "Virtual Network",
+                "name": "virtualNetwork",
+                "toolTip": "Deploy a new Virtual Network with subnets for AI/ML workloads, private endpoints, and optional Application Gateway/API Management/Container Apps subnets",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Agent Subnet NSG",
+                "name": "agentNsg",
+                "toolTip": "Deploy Network Security Group for the agent (workload) subnet",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Private Endpoints Subnet NSG",
+                "name": "peNsg",
+                "toolTip": "Deploy Network Security Group for the private endpoints subnet",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Application Gateway",
+                "name": "applicationGateway",
+                "toolTip": "Deploy Azure Application Gateway for web application routing and load balancing",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Application Gateway NSG",
+                "name": "applicationGatewayNsg",
+                "toolTip": "Deploy Network Security Group for Application Gateway subnet",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Application Gateway Public IP",
+                "name": "applicationGatewayPublicIp",
+                "toolTip": "Deploy a Public IP address for the Application Gateway",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Azure Firewall",
+                "name": "firewall",
+                "toolTip": "Deploy Azure Firewall for network-level security and traffic inspection",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "WAF Policy",
+                "name": "wafPolicy",
+                "toolTip": "Deploy Web Application Firewall policy for Application Gateway",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "Networking Components",
+            "name": "networkingSection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "label": "Azure AI Search",
+                "name": "searchService",
+                "toolTip": "Deploy Azure AI Search service for vector search and retrieval-augmented generation (RAG)",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Cosmos DB",
+                "name": "cosmosDb",
+                "toolTip": "Deploy Azure Cosmos DB for NoSQL database capabilities",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Storage Account",
+                "name": "storageAccount",
+                "toolTip": "Deploy Azure Storage Account for blob storage, data lake, and file shares",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Key Vault",
+                "name": "keyVault",
+                "toolTip": "Deploy Azure Key Vault for secrets, keys, and certificates management",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "App Configuration",
+                "name": "appConfig",
+                "toolTip": "Deploy Azure App Configuration for centralized application settings management",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Bing Grounding",
+                "name": "groundingWithBingSearch",
+                "toolTip": "Deploy Bing Search resource for grounding AI models with current web data",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "AI/ML Core Services",
+            "name": "aimlCoreSection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "label": "Log Analytics Workspace",
+                "name": "logAnalytics",
+                "toolTip": "Deploy Log Analytics Workspace for centralized logging and monitoring",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Application Insights",
+                "name": "appInsights",
+                "toolTip": "Deploy Application Insights for application performance monitoring (APM)",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "Observability & Monitoring",
+            "name": "observabilitySection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "label": "Container Registry",
+                "name": "containerRegistry",
+                "toolTip": "Deploy Azure Container Registry for storing and managing container images",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Container Apps Environment",
+                "name": "containerEnv",
+                "toolTip": "Deploy Azure Container Apps Environment for hosting microservices and containerized applications",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Container Apps Environment NSG",
+                "name": "acaEnvironmentNsg",
+                "toolTip": "Deploy Network Security Group for Azure Container Apps Environment subnet",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Container Apps",
+                "name": "containerApps",
+                "toolTip": "Deploy sample Azure Container Apps for GenAI applications",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "Container Platform",
+            "name": "containerPlatformSection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "label": "API Management",
+                "name": "apiManagement",
+                "toolTip": "Deploy Azure API Management for API gateway, security, and management capabilities",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "API Management NSG",
+                "name": "apiManagementNsg",
+                "toolTip": "Deploy Network Security Group for API Management subnet",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "API Management",
+            "name": "apiManagementSection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "label": "Azure Bastion",
+                "name": "bastionHost",
+                "toolTip": "Deploy Azure Bastion for secure RDP/SSH access to virtual machines",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Jump VM",
+                "name": "jumpVm",
+                "toolTip": "Deploy a Jump Box virtual machine for secure access to the landing zone",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Jumpbox NSG",
+                "name": "jumpboxNsg",
+                "toolTip": "Deploy Network Security Group for Jumpbox subnet",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "Build VM",
+                "name": "buildVm",
+                "toolTip": "Deploy a Build virtual machine for DevOps build agents",
+                "type": "Microsoft.Common.CheckBox"
+              },
+              {
+                "label": "DevOps Build Agents NSG",
+                "name": "devopsBuildAgentsNsg",
+                "toolTip": "Deploy Network Security Group for DevOps build agents subnet",
+                "type": "Microsoft.Common.CheckBox"
+              }
+            ],
+            "label": "Security & Access",
+            "name": "securityAccessSection",
+            "type": "Microsoft.Common.Section"
+          }
+        ],
+        "label": "Component Selection",
+        "name": "componentSelection"
+      },
+      {
+        "elements": [
+          {
+            "name": "networkConfigInfo",
+            "options": {
+              "icon": "Info",
+              "text": "Configure network settings for your AI/ML Landing Zone. You can create a new virtual network or integrate with an existing platform landing zone.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone/blob/main/docs/how_to_use.md"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true
+          },
+          {
+            "label": "Platform Landing Zone Integration",
+            "name": "platformLandingZone",
+            "toolTip": "Enable platform landing zone integration. When true, private DNS zones and private endpoints are managed by the platform landing zone.",
+            "type": "Microsoft.Common.CheckBox"
+          },
+          {
+            "name": "platformLzInfo",
+            "options": {
+              "icon": "Info",
+              "text": "Platform Landing Zone mode: Private DNS zones will not be created. Instead, the deployment expects existing platform-managed DNS zones. Private endpoints will be configured to use those zones.",
+              "uri": "https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": "[steps('networkConfig').platformLandingZone]"
+          },
+          {
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "Create new VNet",
+                  "value": "new"
+                },
+                {
+                  "label": "Use existing VNet",
+                  "value": "existing"
+                }
+              ],
+              "required": true
+            },
+            "defaultValue": "Create new VNet",
+            "label": "Virtual Network Deployment",
+            "name": "vnetDeploymentMode",
+            "toolTip": "Choose whether to create a new virtual network or use an existing one",
+            "type": "Microsoft.Common.OptionsGroup",
+            "visible": "[or(equals(steps('installProfile').installationProfile, 'full'), equals(steps('installProfile').installationProfile, 'core'), steps('componentSelection').networkingSection.virtualNetwork)]"
+          },
+          {
+            "name": "existingVnetInfo",
+            "options": {
+              "icon": "Warning",
+              "text": "When using an existing VNet, you'll need to provide the resource ID in the Advanced Configuration step. The deployment will add required subnets to the existing VNet.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone/blob/main/docs/parameters.md"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": "[equals(steps('networkConfig').vnetDeploymentMode, 'existing')]"
+          }
+        ],
+        "label": "Network Configuration",
+        "name": "networkConfig"
+      },
+      {
+        "elements": [
+          {
+            "name": "advancedInfo",
+            "options": {
+              "icon": "Info",
+              "text": "Advanced settings for reusing existing resources and configuring resource-specific options. Leave fields empty to create all resources from scratch.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone/blob/main/docs/parameters.md"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true
+          },
+          {
+            "elements": [
+              {
+                "name": "tagsInfo",
+                "options": {
+                  "text": "Add tags to apply to all deployed resources. Tags help organize and manage Azure resources."
+                },
+                "type": "Microsoft.Common.TextBlock"
+              }
+            ],
+            "label": "Resource Tags",
+            "name": "tagsSection",
+            "type": "Microsoft.Common.Section"
+          },
+          {
+            "elements": [
+              {
+                "name": "existingResourcesInfo",
+                "options": {
+                  "text": "Provide resource IDs for existing resources you want to reuse instead of creating new ones. Leave empty to create all resources."
+                },
+                "type": "Microsoft.Common.TextBlock"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.Network/virtualNetworks/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Azure Virtual Network resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Virtual Network Resource ID",
+                "name": "virtualNetworkResourceId",
+                "toolTip": "Existing VNet resource ID to reuse. Format: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}",
+                "type": "Microsoft.Common.TextBox",
+                "visible": "[equals(steps('networkConfig').vnetDeploymentMode, 'existing')]"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.OperationalInsights/workspaces/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Log Analytics Workspace resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Log Analytics Workspace Resource ID",
+                "name": "logAnalyticsWorkspaceResourceId",
+                "toolTip": "Existing Log Analytics Workspace resource ID to reuse",
+                "type": "Microsoft.Common.TextBox"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.Insights/components/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Application Insights resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Application Insights Resource ID",
+                "name": "appInsightsResourceId",
+                "toolTip": "Existing Application Insights resource ID to reuse",
+                "type": "Microsoft.Common.TextBox"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.Storage/storageAccounts/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Storage Account resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Storage Account Resource ID",
+                "name": "storageAccountResourceId",
+                "toolTip": "Existing Storage Account resource ID to reuse",
+                "type": "Microsoft.Common.TextBox"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.KeyVault/vaults/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Key Vault resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Key Vault Resource ID",
+                "name": "keyVaultResourceId",
+                "toolTip": "Existing Key Vault resource ID to reuse",
+                "type": "Microsoft.Common.TextBox"
+              },
+              {
+                "constraints": {
+                  "regex": "^$|^/subscriptions/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/resourceGroups/[^/]+/providers/Microsoft.ContainerRegistry/registries/[^/]+$",
+                  "required": false,
+                  "validationMessage": "Must be a valid Container Registry resource ID or empty"
+                },
+                "defaultValue": "",
+                "label": "Container Registry Resource ID",
+                "name": "containerRegistryResourceId",
+                "toolTip": "Existing Azure Container Registry resource ID to reuse",
+                "type": "Microsoft.Common.TextBox"
+              }
+            ],
+            "label": "Existing Resource IDs (Optional)",
+            "name": "existingResourcesSection",
+            "type": "Microsoft.Common.Section"
+          }
+        ],
+        "label": "Advanced Configuration",
+        "name": "advancedConfig"
+      },
+      {
+        "elements": [
+          {
+            "name": "reviewInfo",
+            "options": {
+              "icon": "Info",
+              "text": "Review your configuration before deployment. The AI/ML Landing Zone will be deployed with the selected components and settings.",
+              "uri": "https://github.com/Azure/bicep-avm-ptn-aiml-landing-zone"
+            },
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true
+          },
+          {
+            "name": "deploymentSummary",
+            "options": {
+              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', location(), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
+            },
+            "type": "Microsoft.Common.TextBlock"
+          }
+        ],
+        "label": "Review + Create",
+        "name": "reviewSummary"
+      }
+    ]
+  },
+  "version": "0.1.2-preview"
+}

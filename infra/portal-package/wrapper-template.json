@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "description": "Secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Includes Full (28 components), Core (11 components), and Custom installation profiles."
+  },
+  "contentVersion": "1.0.0.0",
+  "resources": [
+    {
+      "apiVersion": "2021-04-01",
+      "name": "linkedTemplate",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "templateLink": {
+          "uri": "https://templatespecsjfvceqlo.blob.core.windows.net/templatespecs/AI-ML-Landing-Zone-1.0.0-template.json?"
+        },
+        "parameters": {},
+        "mode": "Incremental"
+      }
+    }
+  ],
+  "parameters": {},
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
+}

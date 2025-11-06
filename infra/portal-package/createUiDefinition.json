@@ -599,7 +599,12 @@
       },
       "privateDnsZonesDefinition": null,
       "nsgDefinitions": null,
-      "vNetDefinition": null,
+      "vNetDefinition": {
+        "addressPrefixes": [
+          "192.168.0.0/22"
+        ],
+        "name": "[concat('vnet-', coalesce(basics('baseName'), basics('resourceToken'), 'aiml'))]"
+      },
       "existingVNetSubnetsDefinition": null,
       "apimPrivateDnsZoneDefinition": null,
       "cognitiveServicesPrivateDnsZoneDefinition": null,

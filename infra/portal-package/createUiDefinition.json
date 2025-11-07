@@ -9,9 +9,6 @@
         "location": {
           "label": "Region",
           "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
-          "resourceTypes": [
-            "Microsoft.Resources/resourceGroups"
-          ],
           "allowedValues": [
             "australiaeast",
             "brazilsouth",

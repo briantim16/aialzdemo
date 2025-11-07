@@ -640,7 +640,35 @@
       "keyVaultDefinition": null,
       "aiSearchDefinition": null,
       "apimDefinition": null,
-      "aiFoundryDefinition": null,
+      "aiFoundryDefinition": {
+        "baseName": "[coalesce(basics('baseName'), basics('resourceToken'), 'aiml')]",
+        "aiModelDeployments": [
+          {
+            "model": {
+              "format": "OpenAI",
+              "name": "gpt-4o-mini",
+              "version": "2024-07-18"
+            },
+            "name": "gpt-4o-mini",
+            "sku": {
+              "name": "GlobalStandard",
+              "capacity": 10
+            }
+          },
+          {
+            "model": {
+              "format": "OpenAI",
+              "name": "text-embedding-3-large",
+              "version": "1"
+            },
+            "name": "text-embedding-3-large",
+            "sku": {
+              "name": "Standard",
+              "capacity": 1
+            }
+          }
+        ]
+      },
       "groundingWithBingDefinition": null,
       "wafPolicyDefinition": null,
       "appGatewayDefinition": null,

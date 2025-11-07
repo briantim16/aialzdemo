@@ -5,32 +5,7 @@
   "parameters": {
     "config": {
       "basics": {
-        "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
-        "location": {
-          "label": "Region",
-          "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
-          "allowedValues": [
-            "australiaeast",
-            "brazilsouth",
-            "canadacentral",
-            "canadaeast",
-            "centralindia",
-            "eastasia",
-            "eastus",
-            "eastus2",
-            "francecentral",
-            "germanywestcentral",
-            "japaneast",
-            "koreacentral",
-            "northeurope",
-            "norwayeast",
-            "southafricanorth",
-            "southcentralus",
-            "southeastasia",
-            "uksouth",
-            "westus"
-          ]
-        }
+        "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment."
       }
     },
     "basics": [
@@ -144,6 +119,111 @@
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        "name": "deploymentRegion",
+        "label": "Deployment Region",
+        "elements": [
+          {
+            "name": "regionInfo",
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true,
+            "options": {
+              "icon": "Info",
+              "text": "Select the Azure region where all AI/ML Landing Zone resources will be deployed. This is independent of your resource group location and can be changed at any time.",
+              "uri": "https://learn.microsoft.com/azure/openai/overview#regional-availability"
+            }
+          },
+          {
+            "name": "location",
+            "type": "Microsoft.Common.DropDown",
+            "label": "Region",
+            "toolTip": "Azure region for deploying all AI/ML Landing Zone resources. Only regions with Azure OpenAI service availability are listed.",
+            "defaultValue": "East US",
+            "constraints": {
+              "required": true,
+              "allowedValues": [
+                {
+                  "label": "Australia East",
+                  "value": "australiaeast"
+                },
+                {
+                  "label": "Brazil South",
+                  "value": "brazilsouth"
+                },
+                {
+                  "label": "Canada Central",
+                  "value": "canadacentral"
+                },
+                {
+                  "label": "Canada East",
+                  "value": "canadaeast"
+                },
+                {
+                  "label": "Central India",
+                  "value": "centralindia"
+                },
+                {
+                  "label": "East Asia",
+                  "value": "eastasia"
+                },
+                {
+                  "label": "East US",
+                  "value": "eastus"
+                },
+                {
+                  "label": "East US 2",
+                  "value": "eastus2"
+                },
+                {
+                  "label": "France Central",
+                  "value": "francecentral"
+                },
+                {
+                  "label": "Germany West Central",
+                  "value": "germanywestcentral"
+                },
+                {
+                  "label": "Japan East",
+                  "value": "japaneast"
+                },
+                {
+                  "label": "Korea Central",
+                  "value": "koreacentral"
+                },
+                {
+                  "label": "North Europe",
+                  "value": "northeurope"
+                },
+                {
+                  "label": "Norway East",
+                  "value": "norwayeast"
+                },
+                {
+                  "label": "South Africa North",
+                  "value": "southafricanorth"
+                },
+                {
+                  "label": "South Central US",
+                  "value": "southcentralus"
+                },
+                {
+                  "label": "Southeast Asia",
+                  "value": "southeastasia"
+                },
+                {
+                  "label": "UK South",
+                  "value": "uksouth"
+                },
+                {
+                  "label": "West US",
+                  "value": "westus"
+                }
+              ]
+            },
+            "visible": true
           }
         ]
       },
@@ -667,14 +747,14 @@
             "name": "deploymentSummary",
             "type": "Microsoft.Common.TextBlock",
             "options": {
-              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', location(), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
+              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', steps('deploymentRegion').location, '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
             }
           }
         ]
       }
     ],
     "outputs": {
-      "location": "[location()]",
+      "location": "[steps('deploymentRegion').location]",
       "baseName": "[basics('baseName')]",
       "resourceToken": "[basics('resourceToken')]",
       "enableTelemetry": "[basics('enableTelemetry')]",

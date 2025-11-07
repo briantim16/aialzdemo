@@ -20,12 +20,12 @@
         "name": "baseName",
         "type": "Microsoft.Common.TextBox",
         "label": "Base Name",
-        "defaultValue": "",
-        "toolTip": "Base name to seed resource names. Leave empty to auto-generate a unique 12-character token.",
+        "defaultValue": "aimldefault",
+        "toolTip": "Base name to seed resource names (minimum 6 characters required).",
         "constraints": {
-          "required": false,
-          "regex": "^[a-z0-9]{0,12}$",
-          "validationMessage": "Base name must be 0-12 characters, lowercase letters and numbers only."
+          "required": true,
+          "regex": "^[a-z0-9]{6,12}$",
+          "validationMessage": "Base name must be 6-12 characters, lowercase letters and numbers only."
         },
         "visible": true
       },
@@ -33,12 +33,12 @@
         "name": "resourceToken",
         "type": "Microsoft.Common.TextBox",
         "label": "Resource Token",
-        "defaultValue": "",
-        "toolTip": "Deterministic token for resource names. Leave empty to auto-generate from subscription ID and resource group.",
+        "defaultValue": "autogentoken",
+        "toolTip": "Deterministic token for resource names (minimum 6 characters required).",
         "constraints": {
-          "required": false,
-          "regex": "^[a-z0-9]{0,13}$",
-          "validationMessage": "Resource token must be 0-13 characters, lowercase letters and numbers only."
+          "required": true,
+          "regex": "^[a-z0-9]{6,13}$",
+          "validationMessage": "Resource token must be 6-13 characters, lowercase letters and numbers only."
         },
         "visible": true
       },
@@ -555,8 +555,8 @@
     ],
     "outputs": {
       "location": "[location()]",
-      "baseName": "[if(empty(basics('baseName')), concat('aiml', substring(guid(subscription().subscriptionId, resourceGroup().name), 0, 8)), basics('baseName'))]",
-      "resourceToken": "[if(empty(basics('resourceToken')), toLower(substring(guid(subscription().subscriptionId, resourceGroup().name, location()), 0, 13)), basics('resourceToken'))]",
+      "baseName": "[basics('baseName')]",
+      "resourceToken": "[basics('resourceToken')]",
       "enableTelemetry": "[basics('enableTelemetry')]",
       "flagPlatformLandingZone": "[steps('networkConfig').platformLandingZone]",
       "tags": {},

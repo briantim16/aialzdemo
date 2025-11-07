@@ -441,6 +441,87 @@
             ]
           },
           {
+            "name": "aiModelSection",
+            "type": "Microsoft.Common.Section",
+            "label": "AI Model Selection",
+            "elements": [
+              {
+                "name": "modelInfo",
+                "type": "Microsoft.Common.InfoBox",
+                "visible": true,
+                "options": {
+                  "icon": "Info",
+                  "text": "Select the OpenAI model to deploy. Choose a model that is available in your subscription and region. GPT-3.5-turbo is most widely available.",
+                  "uri": "https://learn.microsoft.com/azure/ai-services/openai/concepts/models"
+                }
+              },
+              {
+                "name": "chatModel",
+                "type": "Microsoft.Common.DropDown",
+                "label": "Chat/Completion Model",
+                "defaultValue": "GPT-3.5-turbo (0613)",
+                "toolTip": "Select the chat/completion model to deploy. Ensure this model is available in your subscription.",
+                "constraints": {
+                  "required": true,
+                  "allowedValues": [
+                    {
+                      "label": "GPT-3.5-turbo (0613)",
+                      "value": "gpt-35-turbo-0613"
+                    },
+                    {
+                      "label": "GPT-3.5-turbo (1106)",
+                      "value": "gpt-35-turbo-1106"
+                    },
+                    {
+                      "label": "GPT-4 (0613)",
+                      "value": "gpt-4-0613"
+                    },
+                    {
+                      "label": "GPT-4 Turbo (2024-04-09)",
+                      "value": "gpt-4-turbo-2024-04-09"
+                    },
+                    {
+                      "label": "GPT-4o (2024-05-13)",
+                      "value": "gpt-4o-2024-05-13"
+                    },
+                    {
+                      "label": "GPT-4o (2024-08-06)",
+                      "value": "gpt-4o-2024-08-06"
+                    },
+                    {
+                      "label": "GPT-4o-mini (2024-07-18)",
+                      "value": "gpt-4o-mini-2024-07-18"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "embeddingModel",
+                "type": "Microsoft.Common.DropDown",
+                "label": "Embedding Model",
+                "defaultValue": "text-embedding-ada-002 (v2)",
+                "toolTip": "Select the embedding model to deploy.",
+                "constraints": {
+                  "required": true,
+                  "allowedValues": [
+                    {
+                      "label": "text-embedding-ada-002 (v2)",
+                      "value": "text-embedding-ada-002-2"
+                    },
+                    {
+                      "label": "text-embedding-3-small (v1)",
+                      "value": "text-embedding-3-small-1"
+                    },
+                    {
+                      "label": "text-embedding-3-large (v1)",
+                      "value": "text-embedding-3-large-1"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
             "name": "existingResourcesSection",
             "type": "Microsoft.Common.Section",
             "label": "Existing Resource IDs (Optional)",
@@ -643,30 +724,8 @@
       "aiFoundryDefinition": {
         "baseName": "[coalesce(basics('baseName'), basics('resourceToken'), 'aiml')]",
         "aiModelDeployments": [
-          {
-            "model": {
-              "format": "OpenAI",
-              "name": "gpt-35-turbo",
-              "version": "0613"
-            },
-            "name": "gpt-35-turbo",
-            "sku": {
-              "name": "Standard",
-              "capacity": 10
-            }
-          },
-          {
-            "model": {
-              "format": "OpenAI",
-              "name": "text-embedding-ada-002",
-              "version": "2"
-            },
-            "name": "text-embedding-ada-002",
-            "sku": {
-              "name": "Standard",
-              "capacity": 1
-            }
-          }
+          "[if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-35-turbo-0613'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-35-turbo', 'version', '0613'), 'name', 'gpt-35-turbo', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-35-turbo-1106'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-35-turbo', 'version', '1106'), 'name', 'gpt-35-turbo', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4-0613'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4', 'version', '0613'), 'name', 'gpt-4', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4-turbo-2024-04-09'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4', 'version', 'turbo-2024-04-09'), 'name', 'gpt-4', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4o-2024-05-13'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o', 'version', '2024-05-13'), 'name', 'gpt-4o', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4o-2024-08-06'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o', 'version', '2024-08-06'), 'name', 'gpt-4o', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o-mini', 'version', '2024-07-18'), 'name', 'gpt-4o-mini', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)))))))))]",
+          "[if(equals(steps('advancedConfig').aiModelSection.embeddingModel, 'text-embedding-ada-002-2'), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-ada-002', 'version', '2'), 'name', 'text-embedding-ada-002', 'sku', createObject('name', 'Standard', 'capacity', 1)), if(equals(steps('advancedConfig').aiModelSection.embeddingModel, 'text-embedding-3-small-1'), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-3-small', 'version', '1'), 'name', 'text-embedding-3-small', 'sku', createObject('name', 'Standard', 'capacity', 1)), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-3-large', 'version', '1'), 'name', 'text-embedding-3-large', 'sku', createObject('name', 'Standard', 'capacity', 1))))]"
         ]
       },
       "groundingWithBingDefinition": null,

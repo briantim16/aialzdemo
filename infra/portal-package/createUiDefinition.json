@@ -7,114 +7,33 @@
       "basics": {
         "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
         "location": {
-          "visible": false
+          "label": "Region",
+          "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
+          "allowedValues": [
+            "australiaeast",
+            "brazilsouth",
+            "canadacentral",
+            "canadaeast",
+            "centralindia",
+            "eastasia",
+            "eastus",
+            "eastus2",
+            "francecentral",
+            "germanywestcentral",
+            "japaneast",
+            "koreacentral",
+            "northeurope",
+            "norwayeast",
+            "southafricanorth",
+            "southcentralus",
+            "southeastasia",
+            "uksouth",
+            "westus"
+          ]
         }
       }
     },
     "basics": [
-      {
-        "name": "resourceGroupName",
-        "type": "Microsoft.Common.TextBox",
-        "label": "Resource Group Name",
-        "defaultValue": "",
-        "toolTip": "Name for the new resource group where all resources will be deployed.",
-        "placeholder": "rg-aiml-landingzone",
-        "constraints": {
-          "required": true,
-          "regex": "^[a-zA-Z0-9._\\-()]{1,90}$",
-          "validationMessage": "Resource group name must be 1-90 characters and can contain alphanumeric, underscore, parentheses, hyphen, and period characters."
-        },
-        "visible": true
-      },
-      {
-        "name": "resourceGroupLocation",
-        "type": "Microsoft.Common.DropDown",
-        "label": "Region",
-        "toolTip": "Azure region for the resource group and all AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
-        "defaultValue": "East US",
-        "constraints": {
-          "required": true,
-          "allowedValues": [
-            {
-              "label": "Australia East",
-              "value": "australiaeast"
-            },
-            {
-              "label": "Brazil South",
-              "value": "brazilsouth"
-            },
-            {
-              "label": "Canada Central",
-              "value": "canadacentral"
-            },
-            {
-              "label": "Canada East",
-              "value": "canadaeast"
-            },
-            {
-              "label": "Central India",
-              "value": "centralindia"
-            },
-            {
-              "label": "East Asia",
-              "value": "eastasia"
-            },
-            {
-              "label": "East US",
-              "value": "eastus"
-            },
-            {
-              "label": "East US 2",
-              "value": "eastus2"
-            },
-            {
-              "label": "France Central",
-              "value": "francecentral"
-            },
-            {
-              "label": "Germany West Central",
-              "value": "germanywestcentral"
-            },
-            {
-              "label": "Japan East",
-              "value": "japaneast"
-            },
-            {
-              "label": "Korea Central",
-              "value": "koreacentral"
-            },
-            {
-              "label": "North Europe",
-              "value": "northeurope"
-            },
-            {
-              "label": "Norway East",
-              "value": "norwayeast"
-            },
-            {
-              "label": "South Africa North",
-              "value": "southafricanorth"
-            },
-            {
-              "label": "South Central US",
-              "value": "southcentralus"
-            },
-            {
-              "label": "Southeast Asia",
-              "value": "southeastasia"
-            },
-            {
-              "label": "UK South",
-              "value": "uksouth"
-            },
-            {
-              "label": "West US",
-              "value": "westus"
-            }
-          ]
-        },
-        "visible": true
-      },
       {
         "name": "baseName",
         "type": "Microsoft.Common.TextBox",
@@ -748,18 +667,14 @@
             "name": "deploymentSummary",
             "type": "Microsoft.Common.TextBlock",
             "options": {
-              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', basics('resourceGroupLocation'), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
+              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', location(), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
             }
           }
         ]
       }
     ],
     "outputs": {
-      "resourceGroup": {
-        "name": "[basics('resourceGroupName')]",
-        "location": "[basics('resourceGroupLocation')]"
-      },
-      "location": "[basics('resourceGroupLocation')]",
+      "location": "[location()]",
       "baseName": "[basics('baseName')]",
       "resourceToken": "[basics('resourceToken')]",
       "enableTelemetry": "[basics('enableTelemetry')]",

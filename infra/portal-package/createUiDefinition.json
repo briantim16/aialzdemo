@@ -794,9 +794,13 @@
       "appGatewayDefinition": null,
       "firewallPolicyDefinition": null,
       "firewallDefinition": null,
-      "buildVmDefinition": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm), createObject('sku', steps('vmConfig').buildVmSize), null)]",
+      "buildVmDefinition": {
+        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm), steps('vmConfig').buildVmSize, 'Standard_D4s_v5')]"
+      },
       "buildVmMaintenanceDefinition": null,
-      "jumpVmDefinition": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), createObject('sku', steps('vmConfig').jumpVmSize), null)]",
+      "jumpVmDefinition": {
+        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('vmConfig').jumpVmSize, 'Standard_D2s_v5')]"
+      },
       "jumpVmMaintenanceDefinition": null
     }
   }

@@ -6,35 +6,103 @@
     "config": {
       "basics": {
         "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
-        "location": {
-          "label": "Region",
-          "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
-          "allowedValues": [
-            "australiaeast",
-            "brazilsouth",
-            "canadacentral",
-            "canadaeast",
-            "centralindia",
-            "eastasia",
-            "eastus",
-            "eastus2",
-            "francecentral",
-            "germanywestcentral",
-            "japaneast",
-            "koreacentral",
-            "northeurope",
-            "norwayeast",
-            "southafricanorth",
-            "southcentralus",
-            "southeastasia",
-            "uksouth",
-            "westus"
-          ],
-          "visible": true
+        "resourceGroup": {
+          "constraints": {
+            "validations": []
+          }
         }
       }
     },
     "basics": [
+      {
+        "name": "resourceGroupLocation",
+        "type": "Microsoft.Common.DropDown",
+        "label": "Region",
+        "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed. This selection is independent of the resource group location.",
+        "defaultValue": "East US",
+        "constraints": {
+          "required": true,
+          "allowedValues": [
+            {
+              "label": "Australia East",
+              "value": "australiaeast"
+            },
+            {
+              "label": "Brazil South",
+              "value": "brazilsouth"
+            },
+            {
+              "label": "Canada Central",
+              "value": "canadacentral"
+            },
+            {
+              "label": "Canada East",
+              "value": "canadaeast"
+            },
+            {
+              "label": "Central India",
+              "value": "centralindia"
+            },
+            {
+              "label": "East Asia",
+              "value": "eastasia"
+            },
+            {
+              "label": "East US",
+              "value": "eastus"
+            },
+            {
+              "label": "East US 2",
+              "value": "eastus2"
+            },
+            {
+              "label": "France Central",
+              "value": "francecentral"
+            },
+            {
+              "label": "Germany West Central",
+              "value": "germanywestcentral"
+            },
+            {
+              "label": "Japan East",
+              "value": "japaneast"
+            },
+            {
+              "label": "Korea Central",
+              "value": "koreacentral"
+            },
+            {
+              "label": "North Europe",
+              "value": "northeurope"
+            },
+            {
+              "label": "Norway East",
+              "value": "norwayeast"
+            },
+            {
+              "label": "South Africa North",
+              "value": "southafricanorth"
+            },
+            {
+              "label": "South Central US",
+              "value": "southcentralus"
+            },
+            {
+              "label": "Southeast Asia",
+              "value": "southeastasia"
+            },
+            {
+              "label": "UK South",
+              "value": "uksouth"
+            },
+            {
+              "label": "West US",
+              "value": "westus"
+            }
+          ]
+        },
+        "visible": true
+      },
       {
         "name": "baseName",
         "type": "Microsoft.Common.TextBox",
@@ -668,14 +736,14 @@
             "name": "deploymentSummary",
             "type": "Microsoft.Common.TextBlock",
             "options": {
-              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', location(), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
+              "text": "[concat('Installation Profile: ', steps('installProfile').installationProfile, '\nRegion: ', basics('resourceGroupLocation'), '\nPlatform Landing Zone: ', if(steps('networkConfig').platformLandingZone, 'Enabled', 'Disabled'))]"
             }
           }
         ]
       }
     ],
     "outputs": {
-      "location": "[location()]",
+      "location": "[basics('resourceGroupLocation')]",
       "baseName": "[basics('baseName')]",
       "resourceToken": "[basics('resourceToken')]",
       "enableTelemetry": "[basics('enableTelemetry')]",

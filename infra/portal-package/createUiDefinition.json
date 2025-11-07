@@ -467,7 +467,7 @@
             "visible": "[or(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('componentSelection').securityAccessSection.buildVm)]",
             "options": {
               "icon": "Warning",
-              "text": "IMPORTANT: If deployment fails due to quota limits, you have three options: 1) Request a quota increase for the VM SKU in your region (can take 1-2 business days), 2) Select a smaller/different VM size and redeploy, or 3) Choose a different region in the 'Deployment Region' step. Smaller B-series VMs typically have higher quota availability.",
+              "text": "IMPORTANT: If deployment fails due to VM quota or capacity restrictions, you have three options: 1) Request a quota increase for the VM SKU in your region (can take 1-2 business days), 2) Select a different VM size (D-series recommended for availability, B-series for cost) and redeploy, or 3) Choose a different region in the 'Deployment Region' step. Some regions may have capacity restrictions for certain SKU families.",
               "uri": "https://learn.microsoft.com/azure/quotas/quickstart-increase-quota-portal"
             }
           },
@@ -476,18 +476,18 @@
             "type": "Microsoft.Common.TextBlock",
             "visible": "[or(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('componentSelection').securityAccessSection.buildVm)]",
             "options": {
-              "text": "Select VM sizes that are available in your chosen region. Different regions may have different SKU availability and quota limits. B-series VMs are recommended for dev/test and typically have higher quota availability."
+              "text": "Select VM sizes that are available in your chosen region. D-series VMs are recommended for better regional availability and performance. B-series VMs offer lower cost but may have capacity restrictions in some regions."
             }
           },
           {
             "name": "jumpVmSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Jump VM Size",
-            "toolTip": "Select the VM size for the Jump Box virtual machine. B-series VMs are recommended for dev/test and typically have higher quota availability.",
+            "toolTip": "Select the VM size for the Jump Box virtual machine. D-series VMs are recommended for better regional availability.",
             "recommendedSizes": [
-              "Standard_B2ms",
-              "Standard_B4ms",
-              "Standard_D2s_v5"
+              "Standard_D2s_v5",
+              "Standard_D4s_v5",
+              "Standard_D2as_v5"
             ],
             "constraints": {
               "allowedSizes": [
@@ -521,11 +521,11 @@
             "name": "buildVmSize",
             "type": "Microsoft.Compute.SizeSelector",
             "label": "Build VM Size",
-            "toolTip": "Select the VM size for the Build virtual machine. B-series VMs are recommended for dev/test and typically have higher quota availability.",
+            "toolTip": "Select the VM size for the Build virtual machine. D-series VMs are recommended for better regional availability.",
             "recommendedSizes": [
-              "Standard_B4ms",
-              "Standard_B8ms",
-              "Standard_D4s_v5"
+              "Standard_D4s_v5",
+              "Standard_D8s_v5",
+              "Standard_D4as_v5"
             ],
             "constraints": {
               "allowedSizes": [

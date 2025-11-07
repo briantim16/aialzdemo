@@ -885,11 +885,11 @@
       "firewallPolicyDefinition": null,
       "firewallDefinition": null,
       "buildVmDefinition": {
-        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm), steps('vmConfig').buildVmSize, 'Standard_B4ms')]"
+        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm), steps('vmConfig').buildVmSize, 'Standard_D4s_v5')]"
       },
       "buildVmMaintenanceDefinition": null,
       "jumpVmDefinition": {
-        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('vmConfig').jumpVmSize, 'Standard_B2ms')]"
+        "sku": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('vmConfig').jumpVmSize, 'Standard_D2s_v5')]"
       },
       "jumpVmMaintenanceDefinition": null
     }

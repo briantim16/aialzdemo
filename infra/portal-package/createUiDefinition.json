@@ -368,6 +368,108 @@
         ]
       },
       {
+        "name": "vmConfig",
+        "label": "Virtual Machine Configuration",
+        "elements": [
+          {
+            "name": "vmConfigInfo",
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true,
+            "options": {
+              "icon": "Info",
+              "text": "Configure VM sizes for Jump VM and Build VM. SKU options are filtered based on your selected region to ensure availability.",
+              "uri": "https://learn.microsoft.com/azure/virtual-machines/sizes"
+            }
+          },
+          {
+            "name": "vmConfigNote",
+            "type": "Microsoft.Common.TextBlock",
+            "visible": "[or(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), steps('componentSelection').securityAccessSection.buildVm)]",
+            "options": {
+              "text": "Select VM sizes that are available in your chosen region. Different regions may have different SKU availability."
+            }
+          },
+          {
+            "name": "jumpVmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Jump VM Size",
+            "toolTip": "Select the VM size for the Jump Box virtual machine",
+            "recommendedSizes": [
+              "Standard_D2s_v5",
+              "Standard_D4s_v5",
+              "Standard_D2as_v5"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_D2s_v5",
+                "Standard_D4s_v5",
+                "Standard_D8s_v5",
+                "Standard_D2as_v5",
+                "Standard_D4as_v5",
+                "Standard_D8as_v5",
+                "Standard_D2ds_v5",
+                "Standard_D4ds_v5",
+                "Standard_D8ds_v5",
+                "Standard_B2s",
+                "Standard_B2ms",
+                "Standard_B4ms"
+              ]
+            },
+            "options": {
+              "hideDiskTypeFilter": false
+            },
+            "osPlatform": "Windows",
+            "imageReference": {
+              "publisher": "MicrosoftWindowsServer",
+              "offer": "WindowsServer",
+              "sku": "2022-datacenter-azure-edition"
+            },
+            "count": 1,
+            "visible": "[or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm)]"
+          },
+          {
+            "name": "buildVmSize",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Build VM Size",
+            "toolTip": "Select the VM size for the Build virtual machine",
+            "recommendedSizes": [
+              "Standard_D4s_v5",
+              "Standard_D8s_v5",
+              "Standard_D4as_v5"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_D2s_v5",
+                "Standard_D4s_v5",
+                "Standard_D8s_v5",
+                "Standard_D16s_v5",
+                "Standard_D2as_v5",
+                "Standard_D4as_v5",
+                "Standard_D8as_v5",
+                "Standard_D16as_v5",
+                "Standard_D2ds_v5",
+                "Standard_D4ds_v5",
+                "Standard_D8ds_v5",
+                "Standard_D16ds_v5",
+                "Standard_B4ms",
+                "Standard_B8ms"
+              ]
+            },
+            "options": {
+              "hideDiskTypeFilter": false
+            },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "Canonical",
+              "offer": "0001-com-ubuntu-server-jammy",
+              "sku": "22_04-lts-gen2"
+            },
+            "count": 1,
+            "visible": "[or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm)]"
+          }
+        ]
+      },
+      {
         "name": "networkConfig",
         "label": "Network Configuration",
         "elements": [
@@ -692,9 +794,9 @@
       "appGatewayDefinition": null,
       "firewallPolicyDefinition": null,
       "firewallDefinition": null,
-      "buildVmDefinition": null,
+      "buildVmDefinition": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.buildVm), createObject('sku', steps('vmConfig').buildVmSize), null)]",
       "buildVmMaintenanceDefinition": null,
-      "jumpVmDefinition": null,
+      "jumpVmDefinition": "[if(or(equals(steps('installProfile').installationProfile, 'full'), steps('componentSelection').securityAccessSection.jumpVm), createObject('sku', steps('vmConfig').jumpVmSize), null)]",
       "jumpVmMaintenanceDefinition": null
     }
   }

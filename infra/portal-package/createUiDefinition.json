@@ -722,10 +722,32 @@
       "aiSearchDefinition": null,
       "apimDefinition": null,
       "aiFoundryDefinition": {
-        "baseName": "[coalesce(basics('baseName'), basics('resourceToken'), 'aiml')]",
+        "baseName": "[basics('baseName')]",
         "aiModelDeployments": [
-          "[if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-35-turbo-0613'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-35-turbo', 'version', '0613'), 'name', 'gpt-35-turbo', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-35-turbo-1106'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-35-turbo', 'version', '1106'), 'name', 'gpt-35-turbo', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4-0613'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4', 'version', '0613'), 'name', 'gpt-4', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4-turbo-2024-04-09'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4', 'version', 'turbo-2024-04-09'), 'name', 'gpt-4', 'sku', createObject('name', 'Standard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4o-2024-05-13'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o', 'version', '2024-05-13'), 'name', 'gpt-4o', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)), if(equals(steps('advancedConfig').aiModelSection.chatModel, 'gpt-4o-2024-08-06'), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o', 'version', '2024-08-06'), 'name', 'gpt-4o', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)), createObject('model', createObject('format', 'OpenAI', 'name', 'gpt-4o-mini', 'version', '2024-07-18'), 'name', 'gpt-4o-mini', 'sku', createObject('name', 'GlobalStandard', 'capacity', 10)))))))))]",
-          "[if(equals(steps('advancedConfig').aiModelSection.embeddingModel, 'text-embedding-ada-002-2'), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-ada-002', 'version', '2'), 'name', 'text-embedding-ada-002', 'sku', createObject('name', 'Standard', 'capacity', 1)), if(equals(steps('advancedConfig').aiModelSection.embeddingModel, 'text-embedding-3-small-1'), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-3-small', 'version', '1'), 'name', 'text-embedding-3-small', 'sku', createObject('name', 'Standard', 'capacity', 1)), createObject('model', createObject('format', 'OpenAI', 'name', 'text-embedding-3-large', 'version', '1'), 'name', 'text-embedding-3-large', 'sku', createObject('name', 'Standard', 'capacity', 1))))]"
+          {
+            "model": {
+              "format": "OpenAI",
+              "name": "gpt-35-turbo",
+              "version": "0613"
+            },
+            "name": "gpt-35-turbo",
+            "sku": {
+              "name": "Standard",
+              "capacity": 10
+            }
+          },
+          {
+            "model": {
+              "format": "OpenAI",
+              "name": "text-embedding-ada-002",
+              "version": "2"
+            },
+            "name": "text-embedding-ada-002",
+            "sku": {
+              "name": "Standard",
+              "capacity": 1
+            }
+          }
         ]
       },
       "groundingWithBingDefinition": null,

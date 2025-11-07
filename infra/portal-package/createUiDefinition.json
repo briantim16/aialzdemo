@@ -435,52 +435,7 @@
                 "name": "tagsInfo",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "Add tags to apply to all deployed resources. Tags help organize and manage Azure resources."
-                }
-              },
-              {
-                "name": "tags",
-                "type": "Microsoft.Common.EditableGrid",
-                "ariaLabel": "Enter resource tags",
-                "label": "Tags",
-                "constraints": {
-                  "width": "Full",
-                  "rows": {
-                    "count": {
-                      "min": 0,
-                      "max": 10
-                    }
-                  },
-                  "columns": [
-                    {
-                      "id": "key",
-                      "header": "Tag Name",
-                      "width": "1fr",
-                      "element": {
-                        "type": "Microsoft.Common.TextBox",
-                        "placeholder": "e.g., Environment",
-                        "constraints": {
-                          "required": true,
-                          "regex": "^[a-zA-Z0-9_.+-]+$",
-                          "validationMessage": "Tag name must contain only letters, numbers, and these characters: _ . + -"
-                        }
-                      }
-                    },
-                    {
-                      "id": "value",
-                      "header": "Tag Value",
-                      "width": "1fr",
-                      "element": {
-                        "type": "Microsoft.Common.TextBox",
-                        "placeholder": "e.g., Production",
-                        "constraints": {
-                          "required": true,
-                          "regex": "^[\\s\\S]*$",
-                          "validationMessage": "Tag value is required"
-                        }
-                      }
-                    }
-                  ]
+                  "text": "Tags can be added after deployment via the Azure Portal or CLI. The template will deploy without custom tags by default."
                 }
               }
             ]
@@ -604,7 +559,7 @@
       "resourceToken": "[basics('resourceToken')]",
       "enableTelemetry": "[basics('enableTelemetry')]",
       "flagPlatformLandingZone": "[steps('networkConfig').platformLandingZone]",
-      "tags": "[if(greater(length(steps('advancedConfig').tagsSection.tags), 0), parse(concat('{', join(map(steps('advancedConfig').tagsSection.tags, (item) => concat('\"', item.key, '\":\"', item.value, '\"')), ','), '}')), createObject())]",
+      "tags": {},
       "deployToggles": {
         "logAnalytics": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').observabilitySection.logAnalytics, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",
         "appInsights": "[if(equals(steps('installProfile').installationProfile, 'custom'), steps('componentSelection').observabilitySection.appInsights, if(equals(steps('installProfile').installationProfile, 'core'), true, true))]",

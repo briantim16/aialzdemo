@@ -555,8 +555,8 @@
     ],
     "outputs": {
       "location": "[location()]",
-      "baseName": "[basics('baseName')]",
-      "resourceToken": "[basics('resourceToken')]",
+      "baseName": "[if(empty(basics('baseName')), concat('aiml', substring(guid(subscription().subscriptionId, resourceGroup().name), 0, 8)), basics('baseName'))]",
+      "resourceToken": "[if(empty(basics('resourceToken')), toLower(substring(guid(subscription().subscriptionId, resourceGroup().name, location()), 0, 13)), basics('resourceToken'))]",
       "enableTelemetry": "[basics('enableTelemetry')]",
       "flagPlatformLandingZone": "[steps('networkConfig').platformLandingZone]",
       "tags": {},

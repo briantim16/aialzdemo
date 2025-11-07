@@ -6,19 +6,31 @@
     "config": {
       "basics": {
         "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
-        "resourceGroup": {
-          "constraints": {
-            "validations": []
-          }
+        "location": {
+          "visible": false
         }
       }
     },
     "basics": [
       {
+        "name": "resourceGroupName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Resource Group Name",
+        "defaultValue": "",
+        "toolTip": "Name for the new resource group where all resources will be deployed.",
+        "placeholder": "rg-aiml-landingzone",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-zA-Z0-9._\\-()]{1,90}$",
+          "validationMessage": "Resource group name must be 1-90 characters and can contain alphanumeric, underscore, parentheses, hyphen, and period characters."
+        },
+        "visible": true
+      },
+      {
         "name": "resourceGroupLocation",
         "type": "Microsoft.Common.DropDown",
         "label": "Region",
-        "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed. This selection is independent of the resource group location.",
+        "toolTip": "Azure region for the resource group and all AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
         "defaultValue": "East US",
         "constraints": {
           "required": true,
@@ -743,6 +755,10 @@
       }
     ],
     "outputs": {
+      "resourceGroup": {
+        "name": "[basics('resourceGroupName')]",
+        "location": "[basics('resourceGroupLocation')]"
+      },
       "location": "[basics('resourceGroupLocation')]",
       "baseName": "[basics('baseName')]",
       "resourceToken": "[basics('resourceToken')]",

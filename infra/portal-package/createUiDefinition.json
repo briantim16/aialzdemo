@@ -8,9 +8,29 @@
         "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
         "location": {
           "label": "Region",
-          "toolTip": "Azure region for AI Landing Zone resources",
+          "toolTip": "Azure region for AI Landing Zone resources. Only regions with Azure OpenAI availability are listed.",
           "resourceTypes": [
             "Microsoft.Resources/resourceGroups"
+          ],
+          "allowedValues": [
+            "australiaeast",
+            "brazilsouth",
+            "canadacentral",
+            "canadaeast",
+            "centralindia",
+            "eastasia",
+            "eastus",
+            "eastus2",
+            "francecentral",
+            "germanywestcentral",
+            "japaneast",
+            "koreacentral",
+            "northeurope",
+            "norwayeast",
+            "southafricanorth",
+            "southcentralus",
+            "southeastasia",
+            "uksouth"
           ]
         }
       }

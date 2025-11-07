@@ -646,22 +646,22 @@
           {
             "model": {
               "format": "OpenAI",
-              "name": "gpt-4o-mini",
-              "version": "2024-07-18"
+              "name": "gpt-35-turbo",
+              "version": "0613"
             },
-            "name": "gpt-4o-mini",
+            "name": "gpt-35-turbo",
             "sku": {
-              "name": "GlobalStandard",
+              "name": "Standard",
               "capacity": 10
             }
           },
           {
             "model": {
               "format": "OpenAI",
-              "name": "text-embedding-3-large",
-              "version": "1"
+              "name": "text-embedding-ada-002",
+              "version": "2"
             },
-            "name": "text-embedding-3-large",
+            "name": "text-embedding-ada-002",
             "sku": {
               "name": "Standard",
               "capacity": 1

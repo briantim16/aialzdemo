@@ -728,7 +728,7 @@
             "model": {
               "format": "OpenAI",
               "name": "gpt-35-turbo",
-              "version": "0613"
+              "version": "1106"
             },
             "name": "gpt-35-turbo",
             "sku": {

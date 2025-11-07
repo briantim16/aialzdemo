@@ -31,7 +31,8 @@
             "southcentralus",
             "southeastasia",
             "uksouth"
-          ]
+          ],
+          "visible": true
         }
       }
     },

@@ -89,6 +89,10 @@
             {
               "label": "UK South",
               "value": "uksouth"
+            },
+            {
+              "label": "West US",
+              "value": "westus"
             }
           ]
         },

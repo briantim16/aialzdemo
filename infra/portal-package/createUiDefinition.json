@@ -5,7 +5,10 @@
   "parameters": {
     "config": {
       "basics": {
-        "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment."
+        "description": "Deploy a secure AI/ML Landing Zone with network isolation, private endpoints, and Azure AI Foundry. Choose from pre-configured profiles or customize your deployment.",
+        "location": {
+          "visible": false
+        }
       }
     },
     "basics": [
